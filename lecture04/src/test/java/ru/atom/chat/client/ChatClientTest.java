@@ -15,8 +15,8 @@ import java.io.IOException;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ChatApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ChatClientTest {
-    private static String MY_NAME_IN_CHAT = "I_AM_STUPID";
-    private static String MY_MESSAGE_TO_CHAT = "SOMEONE_KILL_ME";
+    private static String MY_NAME_IN_CHAT = "KOCHERGINA_OLYA";
+    private static String MY_MESSAGE_TO_CHAT = "MEOW";
 
     @Test
     public void login() throws IOException {
@@ -38,15 +38,46 @@ public class ChatClientTest {
 
     @Test
     public void viewOnline() throws IOException {
+        Response response1 = ChatClient.login(MY_NAME_IN_CHAT);
         Response response = ChatClient.viewOnline();
+        System.out.println("[" + response + "]");
+        String responseBody = response.body().string();
+        System.out.println(responseBody);
+        Assert.assertTrue(response.code() == 200 && responseBody.equals(MY_NAME_IN_CHAT));
+    }
+
+    @Test
+    public void say() throws IOException {
+        Response response1 = ChatClient.login(MY_NAME_IN_CHAT);
+        System.out.println("[" + response1 + "]");
+        Response response = ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
         System.out.println("[" + response + "]");
         System.out.println(response.body().string());
         Assert.assertEquals(200, response.code());
     }
 
     @Test
-    public void say() throws IOException {
-        Response response = ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+    public void logout() throws IOException {
+        Response response1 = ChatClient.login(MY_NAME_IN_CHAT);
+        System.out.println("[" + response1 + "]");
+        Response response = ChatClient.logout(MY_NAME_IN_CHAT);
+        System.out.println("[" + response + "]");
+        System.out.println(response.body().string());
+        Assert.assertEquals(200, response.code());
+    }
+
+    @Test
+    public void deleteHistory() throws IOException {
+        Response response = ChatClient.deleteChatHistory();
+        System.out.println("[" + response + "]");
+        String responseBody = response.body().string();
+        System.out.println(responseBody);
+        Assert.assertTrue(response.code() == 200 && responseBody.equals("DELETED!"));
+    }
+
+    @Test
+    public void getCurrentDate() throws IOException {
+        Response response = ChatClient.getCurrentDate();
         System.out.println("[" + response + "]");
         System.out.println(response.body().string());
         Assert.assertEquals(200, response.code());
