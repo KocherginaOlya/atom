@@ -72,7 +72,7 @@ public class ChatClientTest {
         System.out.println("[" + response + "]");
         String responseBody = response.body().string();
         System.out.println(responseBody);
-        Assert.assertTrue(response.code() == 200 && responseBody.equals("DELETED!"));
+        Assert.assertTrue(response.code() == 200 && responseBody.equals("Messages deleted successfully!"));
     }
 
     @Test
